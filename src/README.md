@@ -52,6 +52,12 @@ python src/generate_counterspeech.py \
 - Qwen3 is a **reasoning model**; its `<think>` trace is huge and decode is
   ~3 tok/s here, so thinking is **disabled by default** (sending
   `chat_template_kwargs={"enable_thinking": false}`). `--enable-thinking` re-enables.
+- **Thinking ON improves strategy distinctness & quality** (it stops one strategy
+  from borrowing another's moves). For the high-quality run, add
+  `--enable-thinking --max-tokens 2048 --timeout 1800` (the reasoning trace needs
+  the larger token budget). On GX10 the full 747-gen run takes ~2 h at
+  `--concurrency 16` (aggregate ~50 tok/s); the parser strips `<think>…</think>`
+  before reading the JSON.
 - Use `--gpu-memory-utilization 0.85` (system already holds ~12 GiB of unified memory).
 - `--concurrency` lets vLLM batch requests (1→8 gave ~5.7× here). `--resume` skips
   already-written `pair_id`s.
