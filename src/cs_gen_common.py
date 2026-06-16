@@ -24,6 +24,8 @@ def extract_json_object(text: str) -> Optional[Dict[str, Any]]:
     if not text:
         return None
     cleaned = text.strip()
+    # Drop a leading reasoning trace (Qwen3 <think>...</think>) when thinking is on.
+    cleaned = re.sub(r"^.*?</think>", "", cleaned, flags=re.DOTALL).strip()
     cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r"\s*```$", "", cleaned)
     try:
